@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: mssql
+    ports:
+      - 1433:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Un!q@to2023
+  php:
+    image: php:7.1-apache
+    depends_on:
+      - mssql
+    ports:
+      - 80:80
+    volumes:
+      - ./php/:/var/www/html
+      - ./custom.conf:/etc/apache2/conf-enabled/custom.conf
+    environment:
+      - DATABASE_URL=sqlsrv:server=localhost;Database=db_vero_digital;Username=sa;Password=Un!q@to2023
+      
+
